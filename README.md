@@ -8,7 +8,22 @@ This repo was heavily inspired by https://github.com/philschmid/vllm-huggingface
 1. Install dependencies with `poetry install`. If using `poetry` as your environment manager, run `poetry shell` to activate your environment. 
 2. Add a `.env` file in the root directory with `HF_TOKEN` defined as a read/write token from [huggingface](https://huggingface.co/settings/tokens). See `.env.example` for how to format.
 
-# Deploy to HuggingFace Endpoint
+# Build and Push Docker Image
+
+The Docker image is built from the `Dockerfile` and `endpoints-entrypoint.sh` in this repo. Each version of the image has a corresponding branch whose name encodes the Docker image tag, with `:` replaced by `__`. For example, the branch `nguptacranium/vllm-huggingface__v0.3.0` corresponds to the image tag `nguptacranium/vllm-huggingface:v0.3.0`. To build a new version, create a branch following this convention, make your changes, then build and push from that branch.
+
+To build and push the image to DockerHub, check out the appropriate branch and run the following commands (substituting your DockerHub username and the desired version):
+
+```bash
+sudo docker build -f Dockerfile -t <username>/vllm-huggingface:<version> .
+sudo docker push <username>/vllm-huggingface:<version>
+```
+
+# Additional docs
+
+For details on how to update/use the docker image, refer to internal docs.
+
+# Deploy to HuggingFace Endpoint (example only - not for practical use)
 
 1. View/Edit the details in `examples/deploy.py`. It is set up to deploy a HuggingFace Inference Endpoint for the [Phi-3-vision model](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct). Once you have set up the necessary variables, run `python examples/deploy.py`.
 2. Go to the link printed by the previous `deploy.py` script to watch the endpoint deployment status and to retrieve the inference base url when finished deploying.
